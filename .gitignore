@@ -5,7 +5,7 @@ node_modules/
 platforms/
 plugins/
 resources/
-dist/
+#dist/
 */www/
 package-lock.json
 yarn.lock
