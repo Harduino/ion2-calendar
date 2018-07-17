@@ -30,9 +30,9 @@ export const MONTH_VALUE_ACCESSOR: any = {
                         [disabled]="day.disable">
                   <p>{{day.title}}</p>
                   <small *ngIf="day.subTitle">{{day?.subTitle}}</small>
-                  <img *ngIf="getMulti4Type(day.time) == 'less'" src="assets/imgs/sun.png" />
-                  <img *ngIf="getMulti4Type(day.time) == 'more'" src="assets/imgs/moon.png" />
-                  <ng-container *ngIf="getMulti4Type(day.time) == 'on'">
+                  <img *ngIf="getMulti4Type(day.time) == 'lunch'" src="assets/imgs/sun.png" />
+                  <img *ngIf="getMulti4Type(day.time) == 'dinner'" src="assets/imgs/moon.png" />
+                  <ng-container *ngIf="getMulti4Type(day.time) == 'all'">
                       <img src="assets/imgs/sun.png" />
                       <img src="assets/imgs/moon.png" />
                   </ng-container>
@@ -66,9 +66,9 @@ export const MONTH_VALUE_ACCESSOR: any = {
                         [disabled]="day.disable">
                   <p>{{day.title}}</p>
                   <small *ngIf="day.subTitle">{{day?.subTitle}}</small>
-                  <img *ngIf="getMulti4Type(day.time) == 'less'" src="assets/imgs/sun.png" />
-                  <img *ngIf="getMulti4Type(day.time) == 'more'" src="assets/imgs/moon.png" />
-                  <ng-container *ngIf="getMulti4Type(day.time) == 'on'">
+                  <img *ngIf="getMulti4Type(day.time) == 'lunch'" src="assets/imgs/sun.png" />
+                  <img *ngIf="getMulti4Type(day.time) == 'dinner'" src="assets/imgs/moon.png" />
+                  <ng-container *ngIf="getMulti4Type(day.time) == 'all'">
                       <img src="assets/imgs/sun.png" />
                       <img src="assets/imgs/moon.png" />
                   </ng-container>
@@ -276,7 +276,6 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
             }
         }
 
-        // this.onChange.emit(, this._dateStates );
         let dates =  this._date.filter(e => e !== null)
         let res = new Array();
         for( let i = 0;i < dates.length;i++ ) {

@@ -13,7 +13,7 @@ export const pickModes = {
 };
 
 var multi4 = {
-    cycle: [ 'less', 'more', 'on' ],
+    cycle: [ 'lunch', 'dinner', 'all' ],
 
     // will be automatically computed
     index: {},
