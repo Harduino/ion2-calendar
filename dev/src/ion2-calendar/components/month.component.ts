@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef, Input, Output, EventEmitter, forwardRef, AfterViewInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CalendarDay, CalendarMonth, CalendarOriginal, PickMode } from '../calendar.model'
-import { defaults, pickModes } from "../config";
+import { defaults, pickModes, multi4 } from "../config";
 
 export const MONTH_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -85,6 +85,7 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
   @Output() onSelectEnd: EventEmitter<CalendarDay> = new EventEmitter();
 
   _date: Array<CalendarDay | null> = [null, null];
+  _dateStates = {};
   _isInit = false;
   _onChanged: Function;
   _onTouched: Function;
@@ -102,6 +103,7 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
   writeValue(obj: any): void {
     if (Array.isArray(obj)) {
       this._date = obj;
+      this._dateStates = {};
     }
   }
 
@@ -206,16 +208,43 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
       return;
     }
 
-    if (this.pickMode === pickModes.MULTI || this.pickMode === pickModes.MULTI4) {
+    if (this.pickMode === pickModes.MULTI ) {
 
       const index = this._date.findIndex(e => e !== null && e.time === item.time);
-
       if (index === -1) {
         this._date.push(item);
       } else {
         this._date.splice(index, 1);
       }
       this.onChange.emit(this._date.filter(e => e !== null));
+    }
+
+    if( this.pickMode === pickModes.MULTI4 ) {
+        const index = this._date.findIndex(e => e !== null && e.time === item.time);
+
+        if (index === -1) {
+          this._date.push(item);
+          this._dateStates[item.time] = multi4.firstName;
+        } else {
+            if( !this._dateStates[item.time] ) {
+                this._dateStates[item.time] = multi4.lastName;
+            }
+
+            if( this._dateStates[item.time] == multi4.lastName ) {
+              this._date.splice(index, 1);
+              if( typeof this._dateStates[item.time] != 'undefined' ) {
+                  delete this._dateStates[item.time];
+              }
+            } else {
+              let currentStateName = this._dateStates[item.time];
+              let nextStateIndex = multi4.index[currentStateName] < multi4.lastIndex ? multi4.index[currentStateName]+1 : multi4.lastIndex
+              let nextStateName = multi4.cycle[nextStateIndex];
+              this._dateStates[item.time] = nextStateName;
+            }
+        }
+        console.log( this._dateStates );
+
+        this.onChange.emit(this._date.filter(e => e !== null));
     }
   }
 
