@@ -20,7 +20,7 @@ export const MONTH_VALUE_ACCESSOR: any = {
             <div class="days">
               <ng-container *ngIf="day">
                 <button type='button'
-                        [class]="'days-btn ' + day.cssClass"
+                        [class]="'days-btn ' + getMulti4Class(day.time) + day.cssClass"
                         [class.today]="day.isToday"
                         (click)="onSelected(day)"
                         [class.marked]="day.marked"
@@ -30,6 +30,12 @@ export const MONTH_VALUE_ACCESSOR: any = {
                         [disabled]="day.disable">
                   <p>{{day.title}}</p>
                   <small *ngIf="day.subTitle">{{day?.subTitle}}</small>
+                  <img *ngIf="getMulti4Type(day.time) == 'less'" src="assets/imgs/sun.png" />
+                  <img *ngIf="getMulti4Type(day.time) == 'more'" src="assets/imgs/moon.png" />
+                  <ng-container *ngIf="getMulti4Type(day.time) == 'on'">
+                      <img src="assets/imgs/sun.png" />
+                      <img src="assets/imgs/moon.png" />
+                  </ng-container>
                 </button>
               </ng-container>
             </div>
@@ -48,7 +54,7 @@ export const MONTH_VALUE_ACCESSOR: any = {
                  [class.between]="isBetween(day)">
               <ng-container *ngIf="day">
                 <button type='button'
-                        [class]="'days-btn ' + day.cssClass"
+                        [class]="'days-btn ' + getMulti4Class(day.time) + day.cssClass"
                         [class.today]="day.isToday"
                         (click)="onSelected(day)"
                         [class.marked]="day.marked"
@@ -60,6 +66,12 @@ export const MONTH_VALUE_ACCESSOR: any = {
                         [disabled]="day.disable">
                   <p>{{day.title}}</p>
                   <small *ngIf="day.subTitle">{{day?.subTitle}}</small>
+                  <img *ngIf="getMulti4Type(day.time) == 'less'" src="assets/imgs/sun.png" />
+                  <img *ngIf="getMulti4Type(day.time) == 'more'" src="assets/imgs/moon.png" />
+                  <ng-container *ngIf="getMulti4Type(day.time) == 'on'">
+                      <img src="assets/imgs/sun.png" />
+                      <img src="assets/imgs/moon.png" />
+                  </ng-container>
                 </button>
               </ng-container>
 
@@ -158,7 +170,11 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
 
     if (Array.isArray(this._date)) {
 
-      if (this.pickMode !== pickModes.MULTI && this.pickMode !== pickModes.MULTI4) {
+      if (this.pickMode !== pickModes.MULTI) {
+        if (this.pickMode == pickModes.MULTI4) {
+          return false;
+        }
+
         if (this._date[0] !== null) {
           return time === this._date[0].time
         }
@@ -171,7 +187,23 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
       }
 
     } else {
-      return false
+      return false;
+    }
+  }
+
+  getMulti4Class(time) {
+    if( this._dateStates[time] ) {
+      return `multi4-${this._dateStates[time]}`;
+    } else {
+      return '';
+    }
+  }
+
+  getMulti4Type(time) {
+    if( this._dateStates[time] ) {
+      return this._dateStates[time];
+    } else {
+      return '';
     }
   }
 
