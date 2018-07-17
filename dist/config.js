@@ -4,7 +4,7 @@ exports.defaults = {
     DATE_FORMAT: 'YYYY-MM-DD',
     COLOR: 'primary',
     WEEKS_FORMAT: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-    MONTH_FORMAT: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+    MONTH_FORMAT: ['ЯНВ', 'ФЕВ', 'МАР', 'АПР', 'МАЙ', 'ИЮН', 'ИЮЛ', 'АВГ', 'СЕН', 'ОКТ', 'НОЯ', 'ДЕК']
 };
 exports.pickModes = {
     SINGLE: 'single',
