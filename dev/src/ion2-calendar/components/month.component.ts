@@ -156,7 +156,7 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
 
     if (Array.isArray(this._date)) {
 
-      if (this.pickMode !== pickModes.MULTI) {
+      if (this.pickMode !== pickModes.MULTI && this.pickMode !== pickModes.MULTI4) {
         if (this._date[0] !== null) {
           return time === this._date[0].time
         }
@@ -206,7 +206,7 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
       return;
     }
 
-    if (this.pickMode === pickModes.MULTI) {
+    if (this.pickMode === pickModes.MULTI || this.pickMode === pickModes.MULTI4) {
 
       const index = this._date.findIndex(e => e !== null && e.time === item.time);
 

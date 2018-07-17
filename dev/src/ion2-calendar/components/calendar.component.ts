@@ -250,6 +250,19 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
         this.onChange.emit(dates);
         break;
 
+      case pickModes.MULTI4:
+        let dates4 = [];
+
+        for (let i = 0; i < $event.length; i++) {
+          if ($event[i] && $event[i].time) {
+            dates4.push(this._handleType($event[i].time));
+          }
+        }
+
+        this._onChanged(dates4);
+        this.onChange.emit(dates4);
+        break;
+
       default:
 
     }
@@ -362,6 +375,16 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
         break;
 
       case 'multi':
+        if (Array.isArray(value)) {
+          this._calendarMonthValue = value.map(e => {
+            return this._createCalendarDay(e)
+          });
+        } else {
+          this._calendarMonthValue = [null, null];
+        }
+        break;
+
+      case 'multi4':
         if (Array.isArray(value)) {
           this._calendarMonthValue = value.map(e => {
             return this._createCalendarDay(e)

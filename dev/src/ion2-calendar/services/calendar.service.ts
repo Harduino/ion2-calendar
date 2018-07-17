@@ -237,6 +237,9 @@ export class CalendarService {
       case pickModes.MULTI:
         result = original.map(e => this.multiFormat(e.time));
         break;
+      case pickModes.MULTI4:
+        result = original.map(e => this.multiFormat(e.time));
+        break;
       default:
         result = original;
     }

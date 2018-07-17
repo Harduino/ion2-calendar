@@ -21,7 +21,7 @@ export class DemoMultiFourStatesComponent {
 	date: string[] = ['2018-01-01', '2018-01-02', '2018-01-05'];
 	options: CalendarComponentOptions = {
 		from: new Date(2000, 0, 1),
-		pickMode: 'multi'
+		pickMode: 'multi4'
 	};
 	constructor(public modalCtrl: ModalController) {
 
