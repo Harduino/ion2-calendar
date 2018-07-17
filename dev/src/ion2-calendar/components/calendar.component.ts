@@ -65,6 +65,7 @@ export const ION_CAL_VALUE_ACCESSOR: Provider = {
                           [month]="monthOpt"
                           [readonly]="readonly"
                           (onChange)="onChanged($event)"
+                          (onChange4)="onChanged4($event)"
                           (swipe)="swipeEvent($event)"
                           (onSelect)="onSelect.emit($event)"
                           (onSelectStart)="onSelectStart.emit($event)"
@@ -250,22 +251,26 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
         this.onChange.emit(dates);
         break;
 
-      case pickModes.MULTI4:
-        let dates4 = [];
-
-        for (let i = 0; i < $event.length; i++) {
-          if ($event[i] && $event[i].time) {
-            dates4.push(this._handleType($event[i].time));
-          }
-        }
-
-        this._onChanged(dates4);
-        this.onChange.emit(dates4);
-        break;
-
       default:
 
     }
+  }
+
+  onChanged4($event): void {
+      switch (this._d.pickMode) {
+          case pickModes.MULTI4:
+              let dates4 = new Array();
+              for (let i = 0; i < $event.length; i++) {
+                  if ($event[i] && $event[i].date.time) {
+                      dates4.push({
+                        date: this._handleType($event[i].date.time),
+                        state: $event[i].state
+                      });
+                  }
+              }
+              this.onChange.emit(dates4);
+          break;
+      }
   }
 
   swipeEvent($event: any): void {

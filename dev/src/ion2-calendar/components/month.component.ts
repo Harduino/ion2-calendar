@@ -92,6 +92,7 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
   @Input() color: string = defaults.COLOR;
 
   @Output() onChange: EventEmitter<CalendarDay[]> = new EventEmitter();
+  @Output() onChange4: EventEmitter<any> = new EventEmitter();
   @Output() onSelect: EventEmitter<CalendarDay> = new EventEmitter();
   @Output() onSelectStart: EventEmitter<CalendarDay> = new EventEmitter();
   @Output() onSelectEnd: EventEmitter<CalendarDay> = new EventEmitter();
@@ -274,9 +275,20 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
               this._dateStates[item.time] = nextStateName;
             }
         }
-        console.log( this._dateStates );
 
-        this.onChange.emit(this._date.filter(e => e !== null));
+        // this.onChange.emit(, this._dateStates );
+        let dates =  this._date.filter(e => e !== null)
+        let res = new Array();
+        for( let i = 0;i < dates.length;i++ ) {
+            let date = dates[i];
+            if( this._dateStates[date.time] ) {
+                res.push({
+                    date:  date,
+                    state: this._dateStates[date.time]
+                });
+            }
+        }
+        this.onChange4.emit( res );
     }
   }
 
