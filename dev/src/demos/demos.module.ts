@@ -13,6 +13,7 @@ import { DemoModalDefaultScrollComponent } from "./demo-modal-default-scroll";
 import { DemoModalConfigDaysComponent } from "./demo-modal-config-days";
 import { DemoBasicComponent } from "./demo-basic";
 import { DemoMultiComponent } from "./demo-multi";
+import { DemoMultiFourStatesComponent } from "./demo-multi-four-states";
 import { DemoRangeComponent } from "./demo-range";
 import { DemoOptionsComponent } from "./demo-options";
 import { DemoEventsComponent } from "./demo-events";
@@ -36,6 +37,7 @@ const COMPONENTS = [
   DemoModalConfigDaysComponent,
   DemoBasicComponent,
   DemoMultiComponent,
+  DemoMultiFourStatesComponent,
   DemoRangeComponent,
   DemoOptionsComponent,
   DemoEventsComponent,
