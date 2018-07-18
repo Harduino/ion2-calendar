@@ -89,7 +89,7 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   private _d: CalendarModalOptions;
   private _options: CalendarComponentOptions;
   private _view: 'month' | 'days' = 'days';
-  private _calendarMonthValue = [null, null];
+  private _calendarMonthValue: CalendarDay[] = [null, null];
 
   private _showToggleButtons = true;
   get showToggleButtons(): boolean {

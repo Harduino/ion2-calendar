@@ -33,7 +33,6 @@ export class DemoMultiFourStatesComponent {
 	}
 
 	onChange($event) {
-		console.log('changed!', $event);
 		this.date = {};
 		for( let i = 0;i < $event.length;i++ ) {
 			let dateItem = $event[i];
