@@ -15,10 +15,12 @@ var MonthComponent = /** @class */ (function () {
         this.readonly = false;
         this.color = config_1.defaults.COLOR;
         this.onChange = new core_1.EventEmitter();
+        this.onChange4 = new core_1.EventEmitter();
         this.onSelect = new core_1.EventEmitter();
         this.onSelectStart = new core_1.EventEmitter();
         this.onSelectEnd = new core_1.EventEmitter();
         this._date = [null, null];
+        this._dateStates = {};
         this._isInit = false;
     }
     Object.defineProperty(MonthComponent.prototype, "_isRange", {
@@ -32,8 +34,15 @@ var MonthComponent = /** @class */ (function () {
         this._isInit = true;
     };
     MonthComponent.prototype.writeValue = function (obj) {
+        this._dateStates = {};
         if (Array.isArray(obj)) {
             this._date = obj;
+            for (var i = 0; i < this._date.length; i++) {
+                var dateItem = this._date[i];
+                if (dateItem && typeof dateItem['state'] != 'undefined') {
+                    this._dateStates[dateItem['time']] = dateItem['state'];
+                }
+            }
         }
     };
     MonthComponent.prototype.registerOnChange = function (fn) {
@@ -77,6 +86,9 @@ var MonthComponent = /** @class */ (function () {
     MonthComponent.prototype.isSelected = function (time) {
         if (Array.isArray(this._date)) {
             if (this.pickMode !== config_1.pickModes.MULTI) {
+                if (this.pickMode == config_1.pickModes.MULTI4) {
+                    return false;
+                }
                 if (this._date[0] !== null) {
                     return time === this._date[0].time;
                 }
@@ -90,6 +102,22 @@ var MonthComponent = /** @class */ (function () {
         }
         else {
             return false;
+        }
+    };
+    MonthComponent.prototype.getMulti4Class = function (time) {
+        if (this._dateStates[time]) {
+            return "multi4-" + this._dateStates[time];
+        }
+        else {
+            return '';
+        }
+    };
+    MonthComponent.prototype.getMulti4Type = function (time) {
+        if (this._dateStates[time]) {
+            return this._dateStates[time];
+        }
+        else {
+            return '';
         }
     };
     MonthComponent.prototype.onSelected = function (item) {
@@ -137,12 +165,48 @@ var MonthComponent = /** @class */ (function () {
             }
             this.onChange.emit(this._date.filter(function (e) { return e !== null; }));
         }
+        if (this.pickMode === config_1.pickModes.MULTI4) {
+            var index = this._date.findIndex(function (e) { return e !== null && e.time === item.time; });
+            if (index === -1) {
+                this._date.push(item);
+                this._dateStates[item.time] = config_1.multi4.firstName;
+            }
+            else {
+                if (!this._dateStates[item.time]) {
+                    this._dateStates[item.time] = config_1.multi4.lastName;
+                }
+                if (this._dateStates[item.time] == config_1.multi4.lastName) {
+                    this._date.splice(index, 1);
+                    if (typeof this._dateStates[item.time] != 'undefined') {
+                        delete this._dateStates[item.time];
+                    }
+                }
+                else {
+                    var currentStateName = this._dateStates[item.time];
+                    var nextStateIndex = config_1.multi4.index[currentStateName] < config_1.multi4.lastIndex ? config_1.multi4.index[currentStateName] + 1 : config_1.multi4.lastIndex;
+                    var nextStateName = config_1.multi4.cycle[nextStateIndex];
+                    this._dateStates[item.time] = nextStateName;
+                }
+            }
+            var dates = this._date.filter(function (e) { return e !== null; });
+            var res = new Array();
+            for (var i = 0; i < dates.length; i++) {
+                var date = dates[i];
+                if (this._dateStates[date.time]) {
+                    res.push({
+                        date: date,
+                        state: this._dateStates[date.time]
+                    });
+                }
+            }
+            this.onChange4.emit(res);
+        }
     };
     MonthComponent.decorators = [
         { type: core_1.Component, args: [{
                     selector: 'ion-calendar-month',
                     providers: [exports.MONTH_VALUE_ACCESSOR],
-                    template: "\n    <div [class]=\"color\">\n      <ng-template [ngIf]=\"!_isRange\" [ngIfElse]=\"rangeBox\">\n        <div class=\"days-box\">\n          <ng-template ngFor let-day [ngForOf]=\"month.days\" [ngForTrackBy]=\"trackByTime\">\n            <div class=\"days\">\n              <ng-container *ngIf=\"day\">\n                <button type='button'\n                        [class]=\"'days-btn ' + day.cssClass\"\n                        [class.today]=\"day.isToday\"\n                        (click)=\"onSelected(day)\"\n                        [class.marked]=\"day.marked\"\n                        [class.last-month-day]=\"day.isLastMonth\"\n                        [class.next-month-day]=\"day.isNextMonth\"\n                        [class.on-selected]=\"isSelected(day.time)\"\n                        [disabled]=\"day.disable\">\n                  <p>{{day.title}}</p>\n                  <small *ngIf=\"day.subTitle\">{{day?.subTitle}}</small>\n                </button>\n              </ng-container>\n            </div>\n          </ng-template>\n        </div>\n      </ng-template>\n\n      <ng-template #rangeBox>\n        <div class=\"days-box\">\n          <ng-template ngFor let-day [ngForOf]=\"month.days\" [ngForTrackBy]=\"trackByTime\">\n            <div class=\"days\"\n                 [class.startSelection]=\"isStartSelection(day)\"\n                 [class.endSelection]=\"isEndSelection(day)\"\n                 [class.is-first-wrap]=\"day?.isFirst\"\n                 [class.is-last-wrap]=\"day?.isLast\"\n                 [class.between]=\"isBetween(day)\">\n              <ng-container *ngIf=\"day\">\n                <button type='button'\n                        [class]=\"'days-btn ' + day.cssClass\"\n                        [class.today]=\"day.isToday\"\n                        (click)=\"onSelected(day)\"\n                        [class.marked]=\"day.marked\"\n                        [class.last-month-day]=\"day.isLastMonth\"\n                        [class.next-month-day]=\"day.isNextMonth\"\n                        [class.is-first]=\"day.isFirst\"\n                        [class.is-last]=\"day.isLast\"\n                        [class.on-selected]=\"isSelected(day.time)\"\n                        [disabled]=\"day.disable\">\n                  <p>{{day.title}}</p>\n                  <small *ngIf=\"day.subTitle\">{{day?.subTitle}}</small>\n                </button>\n              </ng-container>\n\n            </div>\n          </ng-template>\n        </div>\n      </ng-template>\n    </div>\n  "
+                    template: "\n    <div [class]=\"color\">\n      <ng-template [ngIf]=\"!_isRange\" [ngIfElse]=\"rangeBox\">\n        <div class=\"days-box\">\n          <ng-template ngFor let-day [ngForOf]=\"month.days\" [ngForTrackBy]=\"trackByTime\">\n            <div class=\"days\">\n              <ng-container *ngIf=\"day\">\n                <button type='button'\n                        [class]=\"'days-btn ' + getMulti4Class(day.time) + day.cssClass\"\n                        [class.today]=\"day.isToday\"\n                        (click)=\"onSelected(day)\"\n                        [class.marked]=\"day.marked\"\n                        [class.last-month-day]=\"day.isLastMonth\"\n                        [class.next-month-day]=\"day.isNextMonth\"\n                        [class.on-selected]=\"isSelected(day.time)\"\n                        [disabled]=\"day.disable\">\n                  <p>{{day.title}}</p>\n                  <small *ngIf=\"day.subTitle\">{{day?.subTitle}}</small>\n                  <img *ngIf=\"getMulti4Type(day.time) == 'lunch'\" src=\"assets/imgs/sun.png\" />\n                  <img *ngIf=\"getMulti4Type(day.time) == 'dinner'\" src=\"assets/imgs/moon.png\" />\n                  <ng-container *ngIf=\"getMulti4Type(day.time) == 'all'\">\n                      <img src=\"assets/imgs/sun.png\" />\n                      <img src=\"assets/imgs/moon.png\" />\n                  </ng-container>\n                </button>\n              </ng-container>\n            </div>\n          </ng-template>\n        </div>\n      </ng-template>\n\n      <ng-template #rangeBox>\n        <div class=\"days-box\">\n          <ng-template ngFor let-day [ngForOf]=\"month.days\" [ngForTrackBy]=\"trackByTime\">\n            <div class=\"days\"\n                 [class.startSelection]=\"isStartSelection(day)\"\n                 [class.endSelection]=\"isEndSelection(day)\"\n                 [class.is-first-wrap]=\"day?.isFirst\"\n                 [class.is-last-wrap]=\"day?.isLast\"\n                 [class.between]=\"isBetween(day)\">\n              <ng-container *ngIf=\"day\">\n                <button type='button'\n                        [class]=\"'days-btn ' + getMulti4Class(day.time) + day.cssClass\"\n                        [class.today]=\"day.isToday\"\n                        (click)=\"onSelected(day)\"\n                        [class.marked]=\"day.marked\"\n                        [class.last-month-day]=\"day.isLastMonth\"\n                        [class.next-month-day]=\"day.isNextMonth\"\n                        [class.is-first]=\"day.isFirst\"\n                        [class.is-last]=\"day.isLast\"\n                        [class.on-selected]=\"isSelected(day.time)\"\n                        [disabled]=\"day.disable\">\n                  <p>{{day.title}}</p>\n                  <small *ngIf=\"day.subTitle\">{{day?.subTitle}}</small>\n                  <img *ngIf=\"getMulti4Type(day.time) == 'lunch'\" src=\"assets/imgs/sun.png\" />\n                  <img *ngIf=\"getMulti4Type(day.time) == 'dinner'\" src=\"assets/imgs/moon.png\" />\n                  <ng-container *ngIf=\"getMulti4Type(day.time) == 'all'\">\n                      <img src=\"assets/imgs/sun.png\" />\n                      <img src=\"assets/imgs/moon.png\" />\n                  </ng-container>\n                </button>\n              </ng-container>\n\n            </div>\n          </ng-template>\n        </div>\n      </ng-template>\n    </div>\n  "
                 },] },
     ];
     /** @nocollapse */
@@ -157,6 +221,7 @@ var MonthComponent = /** @class */ (function () {
         "readonly": [{ type: core_1.Input },],
         "color": [{ type: core_1.Input },],
         "onChange": [{ type: core_1.Output },],
+        "onChange4": [{ type: core_1.Output },],
         "onSelect": [{ type: core_1.Output },],
         "onSelectStart": [{ type: core_1.Output },],
         "onSelectEnd": [{ type: core_1.Output },],

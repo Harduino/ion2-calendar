@@ -65,6 +65,7 @@ export const ION_CAL_VALUE_ACCESSOR: Provider = {
                           [month]="monthOpt"
                           [readonly]="readonly"
                           (onChange)="onChanged($event)"
+                          (onChange4)="onChanged4($event)"
                           (swipe)="swipeEvent($event)"
                           (onSelect)="onSelect.emit($event)"
                           (onSelectStart)="onSelectStart.emit($event)"
@@ -255,6 +256,23 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
     }
   }
 
+  onChanged4($event): void {
+      switch (this._d.pickMode) {
+          case pickModes.MULTI4:
+              let dates4 = new Array();
+              for (let i = 0; i < $event.length; i++) {
+                  if ($event[i] && $event[i].date.time) {
+                      dates4.push({
+                        date: this._handleType($event[i].date.time),
+                        state: $event[i].state
+                      });
+                  }
+              }
+              this.onChange.emit(dates4);
+          break;
+      }
+  }
+
   swipeEvent($event: any): void {
     const isNext = $event.deltaX < 0;
     if (isNext && this.canNext()) {
@@ -368,6 +386,26 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
           });
         } else {
           this._calendarMonthValue = [null, null];
+        }
+        break;
+
+      case 'multi4':
+        if (Array.isArray(value)) {
+          this._calendarMonthValue = value.map(e => {
+            return this._createCalendarDay(e)
+          });
+        } else {
+          if( value !== null && typeof value === 'object' ) {
+              let cmv = new Array();
+              for( let dateUnformatted in value ) {
+                  let dateItem = this._createCalendarDay(dateUnformatted);
+                  dateItem['state'] = value[dateUnformatted];
+                  cmv.push(dateItem);
+              }
+              this._calendarMonthValue = cmv;
+          } else {
+              this._calendarMonthValue = [null, null];
+          }
         }
         break;
 

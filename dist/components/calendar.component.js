@@ -168,6 +168,22 @@ var CalendarComponent = /** @class */ (function () {
             default:
         }
     };
+    CalendarComponent.prototype.onChanged4 = function ($event) {
+        switch (this._d.pickMode) {
+            case config_1.pickModes.MULTI4:
+                var dates4 = new Array();
+                for (var i = 0; i < $event.length; i++) {
+                    if ($event[i] && $event[i].date.time) {
+                        dates4.push({
+                            date: this._handleType($event[i].date.time),
+                            state: $event[i].state
+                        });
+                    }
+                }
+                this.onChange.emit(dates4);
+                break;
+        }
+    };
     CalendarComponent.prototype.swipeEvent = function ($event) {
         var isNext = $event.deltaX < 0;
         if (isNext && this.canNext()) {
@@ -269,6 +285,27 @@ var CalendarComponent = /** @class */ (function () {
                     this._calendarMonthValue = [null, null];
                 }
                 break;
+            case 'multi4':
+                if (Array.isArray(value)) {
+                    this._calendarMonthValue = value.map(function (e) {
+                        return _this._createCalendarDay(e);
+                    });
+                }
+                else {
+                    if (value !== null && typeof value === 'object') {
+                        var cmv = new Array();
+                        for (var dateUnformatted in value) {
+                            var dateItem = this._createCalendarDay(dateUnformatted);
+                            dateItem['state'] = value[dateUnformatted];
+                            cmv.push(dateItem);
+                        }
+                        this._calendarMonthValue = cmv;
+                    }
+                    else {
+                        this._calendarMonthValue = [null, null];
+                    }
+                }
+                break;
             default:
         }
     };
@@ -276,7 +313,7 @@ var CalendarComponent = /** @class */ (function () {
         { type: core_1.Component, args: [{
                     selector: 'ion-calendar',
                     providers: [exports.ION_CAL_VALUE_ACCESSOR],
-                    template: "\n    <div class=\"title\">\n      <ng-template [ngIf]=\"_showMonthPicker\" [ngIfElse]=\"title\">\n        <button type=\"button\"\n                ion-button\n                clear\n                class=\"switch-btn\"\n                (click)=\"switchView()\">\n          {{_monthFormat(monthOpt.original.time)}}\n          <ion-icon class=\"arrow-dropdown\"\n                    [name]=\"_view === 'days' ? 'md-arrow-dropdown' : 'md-arrow-dropup'\"></ion-icon>\n        </button>\n      </ng-template>\n      <ng-template #title>\n        <div class=\"switch-btn\">\n          {{_monthFormat(monthOpt.original.time)}}\n        </div>\n      </ng-template>\n      <ng-template [ngIf]=\"_showToggleButtons\">\n        <button type='button' ion-button clear class=\"back\" [disabled]=\"!canBack()\" (click)=\"prev()\">\n          <ion-icon name=\"ios-arrow-back\"></ion-icon>\n        </button>\n        <button type='button' ion-button clear class=\"forward\" [disabled]=\"!canNext()\" (click)=\"next()\">\n          <ion-icon name=\"ios-arrow-forward\"></ion-icon>\n        </button>\n      </ng-template>\n    </div>\n    <ng-template [ngIf]=\"_view === 'days'\" [ngIfElse]=\"monthPicker\">\n      <ion-calendar-week color=\"transparent\"\n                         [weekArray]=\"_d.weekdays\"\n                         [weekStart]=\"_d.weekStart\">\n      </ion-calendar-week>\n\n      <ion-calendar-month class=\"component-mode\"\n                          [(ngModel)]=\"_calendarMonthValue\"\n                          [month]=\"monthOpt\"\n                          [readonly]=\"readonly\"\n                          (onChange)=\"onChanged($event)\"\n                          (swipe)=\"swipeEvent($event)\"\n                          (onSelect)=\"onSelect.emit($event)\"\n                          (onSelectStart)=\"onSelectStart.emit($event)\"\n                          (onSelectEnd)=\"onSelectEnd.emit($event)\"\n                          [pickMode]=\"_d.pickMode\"\n                          [color]=\"_d.color\">\n      </ion-calendar-month>\n    </ng-template>\n\n    <ng-template #monthPicker>\n      <ion-calendar-month-picker [color]=\"_d.color\"\n                                 [monthFormat]=\"_options?.monthPickerFormat\"\n                                 (onSelect)=\"monthOnSelect($event)\"\n                                 [month]=\"monthOpt\">\n      </ion-calendar-month-picker>\n    </ng-template>\n  "
+                    template: "\n    <div class=\"title\">\n      <ng-template [ngIf]=\"_showMonthPicker\" [ngIfElse]=\"title\">\n        <button type=\"button\"\n                ion-button\n                clear\n                class=\"switch-btn\"\n                (click)=\"switchView()\">\n          {{_monthFormat(monthOpt.original.time)}}\n          <ion-icon class=\"arrow-dropdown\"\n                    [name]=\"_view === 'days' ? 'md-arrow-dropdown' : 'md-arrow-dropup'\"></ion-icon>\n        </button>\n      </ng-template>\n      <ng-template #title>\n        <div class=\"switch-btn\">\n          {{_monthFormat(monthOpt.original.time)}}\n        </div>\n      </ng-template>\n      <ng-template [ngIf]=\"_showToggleButtons\">\n        <button type='button' ion-button clear class=\"back\" [disabled]=\"!canBack()\" (click)=\"prev()\">\n          <ion-icon name=\"ios-arrow-back\"></ion-icon>\n        </button>\n        <button type='button' ion-button clear class=\"forward\" [disabled]=\"!canNext()\" (click)=\"next()\">\n          <ion-icon name=\"ios-arrow-forward\"></ion-icon>\n        </button>\n      </ng-template>\n    </div>\n    <ng-template [ngIf]=\"_view === 'days'\" [ngIfElse]=\"monthPicker\">\n      <ion-calendar-week color=\"transparent\"\n                         [weekArray]=\"_d.weekdays\"\n                         [weekStart]=\"_d.weekStart\">\n      </ion-calendar-week>\n\n      <ion-calendar-month class=\"component-mode\"\n                          [(ngModel)]=\"_calendarMonthValue\"\n                          [month]=\"monthOpt\"\n                          [readonly]=\"readonly\"\n                          (onChange)=\"onChanged($event)\"\n                          (onChange4)=\"onChanged4($event)\"\n                          (swipe)=\"swipeEvent($event)\"\n                          (onSelect)=\"onSelect.emit($event)\"\n                          (onSelectStart)=\"onSelectStart.emit($event)\"\n                          (onSelectEnd)=\"onSelectEnd.emit($event)\"\n                          [pickMode]=\"_d.pickMode\"\n                          [color]=\"_d.color\">\n      </ion-calendar-month>\n    </ng-template>\n\n    <ng-template #monthPicker>\n      <ion-calendar-month-picker [color]=\"_d.color\"\n                                 [monthFormat]=\"_options?.monthPickerFormat\"\n                                 (onSelect)=\"monthOnSelect($event)\"\n                                 [month]=\"monthOpt\">\n      </ion-calendar-month-picker>\n    </ng-template>\n  "
                 },] },
     ];
     /** @nocollapse */

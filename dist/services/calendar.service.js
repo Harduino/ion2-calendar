@@ -188,6 +188,9 @@ var CalendarService = /** @class */ (function () {
             case config_1.pickModes.MULTI:
                 result = original.map(function (e) { return _this.multiFormat(e.time); });
                 break;
+            case config_1.pickModes.MULTI4:
+                result = original.map(function (e) { return _this.multiFormat(e.time); });
+                break;
             default:
                 result = original;
         }

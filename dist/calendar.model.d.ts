@@ -104,6 +104,6 @@ export declare class CalendarComponentMonthChange {
 }
 export declare type DefaultDate = Date | string | number | null;
 export declare type Colors = 'primary' | 'secondary' | 'danger' | 'light' | 'dark' | string;
-export declare type PickMode = 'multi' | 'single' | 'range';
+export declare type PickMode = 'multi' | 'multi4' | 'single' | 'range';
 export declare type CalendarComponentTypeProperty = ('string' | 'js-date' | 'moment' | 'time' | 'object');
 export declare type CalendarComponentPayloadTypes = string | Date | number | {};

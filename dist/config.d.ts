@@ -8,4 +8,13 @@ export declare const pickModes: {
     SINGLE: string;
     RANGE: string;
     MULTI: string;
+    MULTI4: string;
 };
+declare var multi4: {
+    cycle: string[];
+    index: {};
+    firstName: string;
+    lastName: string;
+    lastIndex: number;
+};
+export { multi4 };

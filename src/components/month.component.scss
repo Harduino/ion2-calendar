@@ -41,11 +41,19 @@
         color: $color;
     }
     .days .on-selected,
+    .days .multi4-lunch,
+    .days .multi4-dinner,
+    .days .multi4-all,
     .startSelection button.days-btn,
     .endSelection button.days-btn {
         background-color: bindColors($background-color);
         color: $color;
     }
+    .days img {
+        width: 12px;
+        height: 12px;
+    }
+
     .startSelection {
         position: relative;
         &:after {
@@ -131,7 +139,10 @@
     }
   }
 
-  .days .on-selected p {
+  .days .on-selected p,
+  .days .multi4-lunch p,
+  .days .multi4-dinner p,
+  .days .multi4-all p {
         color: $color;
     }
     .startSelection,
@@ -165,7 +176,10 @@ ion-calendar-month {
     .days .marked p {
         font-weight: 500;
     }
-    .days .on-selected {
+    .days .on-selected,
+    .days .multi4-lunch,
+    .days .multi4-dinner,
+    .days .multi4-all {
         border: none;
         p {
             font-size: 1.3em;
@@ -187,7 +201,10 @@ ion-calendar-month {
         font-size: 1.2em;
         color: #333;
     }
-    button.days-btn.on-selected small {
+    button.days-btn.on-selected small,
+    button.days-btn.multi4-lunch small,
+    button.days-btn.multi4-dinner small,
+    button.days-btn.multi4-all small {
         transition: bottom .3s;
         bottom: -14px;
     }

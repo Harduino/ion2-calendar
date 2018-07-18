@@ -38,6 +38,7 @@ export declare class CalendarComponent implements ControlValueAccessor, OnInit {
     canBack(): boolean;
     monthOnSelect(month: number): void;
     onChanged($event: CalendarDay[]): void;
+    onChanged4($event: any): void;
     swipeEvent($event: any): void;
     _onChanged: Function;
     _onTouched: Function;
