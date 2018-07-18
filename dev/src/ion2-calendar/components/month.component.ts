@@ -114,9 +114,16 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
   }
 
   writeValue(obj: any): void {
+    this._dateStates = {};
     if (Array.isArray(obj)) {
       this._date = obj;
-      this._dateStates = {};
+
+      for( let i = 0;i < this._date.length;i++ ) {
+        let dateItem = this._date[i];
+        if( dateItem && typeof dateItem['state'] != 'undefined' ) {
+          this._dateStates[ dateItem['time'] ] = dateItem['state'];
+        }
+      }
     }
   }
 

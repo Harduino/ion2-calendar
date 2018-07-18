@@ -49,15 +49,6 @@
         background-color: bindColors($background-color);
         color: $color;
     }
-    .days .multi4-lunch {
-        // background-color: transparentize(bindColors($background-color),0.66);
-    }
-    .days .multi4-dinner {
-        // background-color: transparentize(bindColors($background-color),0.33);
-    }
-    .days .multi4-all {
-        // background-color: transparentize(bindColors($background-color),0.00);
-    }
     .days img {
         width: 12px;
         height: 12px;

@@ -89,7 +89,7 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   private _d: CalendarModalOptions;
   private _options: CalendarComponentOptions;
   private _view: 'month' | 'days' = 'days';
-  private _calendarMonthValue: CalendarDay[] = [null, null];
+  private _calendarMonthValue = [null, null];
 
   private _showToggleButtons = true;
   get showToggleButtons(): boolean {
@@ -395,7 +395,17 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
             return this._createCalendarDay(e)
           });
         } else {
-          this._calendarMonthValue = [null, null];
+          if( value !== null && typeof value === 'object' ) {
+              let cmv = new Array();
+              for( let dateUnformatted in value ) {
+                  let dateItem = this._createCalendarDay(dateUnformatted);
+                  dateItem['state'] = value[dateUnformatted];
+                  cmv.push(dateItem);
+              }
+              this._calendarMonthValue = cmv;
+          } else {
+              this._calendarMonthValue = [null, null];
+          }
         }
         break;
 
