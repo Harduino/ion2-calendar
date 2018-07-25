@@ -11,10 +11,19 @@ export declare const pickModes: {
     MULTI4: string;
 };
 declare var multi4: {
-    cycle: string[];
-    index: {};
-    firstName: string;
-    lastName: string;
-    lastIndex: number;
+    states: {
+        cycle: string[];
+        index: {};
+        firstName: string;
+        lastName: string;
+        lastIndex: number;
+    };
+    confirms: {
+        cycle: string[];
+        index: {};
+        firstName: string;
+        lastName: string;
+        lastIndex: number;
+    };
 };
 export { multi4 };

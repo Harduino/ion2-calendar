@@ -173,10 +173,12 @@ var CalendarComponent = /** @class */ (function () {
             case config_1.pickModes.MULTI4:
                 var dates4 = new Array();
                 for (var i = 0; i < $event.length; i++) {
-                    if ($event[i] && $event[i].date.time) {
+                    if ($event[i] && $event[i].time) {
+                        var dateItem = $event[i];
                         dates4.push({
-                            date: this._handleType($event[i].date.time),
-                            state: $event[i].state
+                            date: this._handleType(dateItem.time),
+                            state: dateItem.state || config_1.multi4.states.lastName,
+                            confirm: dateItem.confirm || config_1.multi4.confirms.lastName
                         });
                     }
                 }
@@ -295,8 +297,10 @@ var CalendarComponent = /** @class */ (function () {
                     if (value !== null && typeof value === 'object') {
                         var cmv = new Array();
                         for (var dateUnformatted in value) {
+                            var day = value[dateUnformatted];
                             var dateItem = this._createCalendarDay(dateUnformatted);
-                            dateItem['state'] = value[dateUnformatted];
+                            dateItem['state'] = day['state'] || config_1.multi4.states.firstName;
+                            dateItem['confirm'] = day['confirm'] || config_1.multi4.confirms.firstName;
                             cmv.push(dateItem);
                         }
                         this._calendarMonthValue = cmv;

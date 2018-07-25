@@ -16,7 +16,6 @@ export declare class MonthComponent implements ControlValueAccessor, AfterViewIn
     onSelectStart: EventEmitter<CalendarDay>;
     onSelectEnd: EventEmitter<CalendarDay>;
     _date: Array<CalendarDay | null>;
-    _dateStates: {};
     _isInit: boolean;
     _onChanged: Function;
     _onTouched: Function;
@@ -31,7 +30,7 @@ export declare class MonthComponent implements ControlValueAccessor, AfterViewIn
     isBetween(day: CalendarDay): boolean;
     isStartSelection(day: CalendarDay): boolean;
     isSelected(time: number): boolean;
-    getMulti4Class(time: any): string;
-    getMulti4Type(time: any): any;
+    getMulti4Class(day: any): string;
+    getMulti4State(day: any): string;
     onSelected(item: CalendarDay): void;
 }

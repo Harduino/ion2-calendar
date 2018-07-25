@@ -20,7 +20,7 @@ export const MONTH_VALUE_ACCESSOR: any = {
             <div class="days">
               <ng-container *ngIf="day">
                 <button type='button'
-                        [class]="'days-btn ' + getMulti4Class(day.time) + day.cssClass"
+                        [class]="'days-btn ' + getMulti4Class(day) + day.cssClass"
                         [class.today]="day.isToday"
                         (click)="onSelected(day)"
                         [class.marked]="day.marked"
@@ -30,9 +30,9 @@ export const MONTH_VALUE_ACCESSOR: any = {
                         [disabled]="day.disable">
                   <p>{{day.title}}</p>
                   <small *ngIf="day.subTitle">{{day?.subTitle}}</small>
-                  <img *ngIf="getMulti4Type(day.time) == 'lunch'" src="assets/imgs/sun.png" />
-                  <img *ngIf="getMulti4Type(day.time) == 'dinner'" src="assets/imgs/moon.png" />
-                  <ng-container *ngIf="getMulti4Type(day.time) == 'all'">
+                  <img *ngIf="getMulti4State(day) == 'lunch'" src="assets/imgs/sun.png" />
+                  <img *ngIf="getMulti4State(day) == 'dinner'" src="assets/imgs/moon.png" />
+                  <ng-container *ngIf="getMulti4State(day) == 'all'">
                       <img src="assets/imgs/sun.png" />
                       <img src="assets/imgs/moon.png" />
                   </ng-container>
@@ -54,7 +54,7 @@ export const MONTH_VALUE_ACCESSOR: any = {
                  [class.between]="isBetween(day)">
               <ng-container *ngIf="day">
                 <button type='button'
-                        [class]="'days-btn ' + getMulti4Class(day.time) + day.cssClass"
+                        [class]="'days-btn ' + getMulti4Class(day) + day.cssClass"
                         [class.today]="day.isToday"
                         (click)="onSelected(day)"
                         [class.marked]="day.marked"
@@ -66,9 +66,9 @@ export const MONTH_VALUE_ACCESSOR: any = {
                         [disabled]="day.disable">
                   <p>{{day.title}}</p>
                   <small *ngIf="day.subTitle">{{day?.subTitle}}</small>
-                  <img *ngIf="getMulti4Type(day.time) == 'lunch'" src="assets/imgs/sun.png" />
-                  <img *ngIf="getMulti4Type(day.time) == 'dinner'" src="assets/imgs/moon.png" />
-                  <ng-container *ngIf="getMulti4Type(day.time) == 'all'">
+                  <img *ngIf="getMulti4State(day) == 'lunch'" src="assets/imgs/sun.png" />
+                  <img *ngIf="getMulti4State(day) == 'dinner'" src="assets/imgs/moon.png" />
+                  <ng-container *ngIf="getMulti4State(day) == 'all'">
                       <img src="assets/imgs/sun.png" />
                       <img src="assets/imgs/moon.png" />
                   </ng-container>
@@ -98,7 +98,6 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
   @Output() onSelectEnd: EventEmitter<CalendarDay> = new EventEmitter();
 
   _date: Array<CalendarDay | null> = [null, null];
-  _dateStates = {};
   _isInit = false;
   _onChanged: Function;
   _onTouched: Function;
@@ -114,16 +113,8 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
   }
 
   writeValue(obj: any): void {
-    this._dateStates = {};
     if (Array.isArray(obj)) {
       this._date = obj;
-
-      for( let i = 0;i < this._date.length;i++ ) {
-        let dateItem = this._date[i];
-        if( dateItem && typeof dateItem['state'] != 'undefined' ) {
-          this._dateStates[ dateItem['time'] ] = dateItem['state'];
-        }
-      }
     }
   }
 
@@ -199,17 +190,21 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
     }
   }
 
-  getMulti4Class(time) {
-    if( this._dateStates[time] ) {
-      return `multi4-${this._dateStates[time]}`;
+  getMulti4Class(day) {
+    let index = this._date.findIndex(e => e !== null && e.time === day.time);
+    if (index !== -1) {
+        let dayFounded = this._date[index];
+        return `multi4-${dayFounded.state} multi4-confirm-${dayFounded.confirm}`;
     } else {
       return '';
     }
   }
 
-  getMulti4Type(time) {
-    if( this._dateStates[time] ) {
-      return this._dateStates[time];
+  getMulti4State(day) {
+    let index = this._date.findIndex(e => e !== null && e.time === day.time);
+    if (index !== -1) {
+        let dayFounded = this._date[index];
+        return dayFounded.state;
     } else {
       return '';
     }
@@ -262,39 +257,29 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
     if( this.pickMode === pickModes.MULTI4 ) {
         const index = this._date.findIndex(e => e !== null && e.time === item.time);
 
+        if( !item.state ) {
+            item.state = multi4.states.lastName;
+        }
+        if( !item.confirm ) {
+            item.confirm = multi4.confirms.lastName;
+        }
+
         if (index === -1) {
           this._date.push(item);
-          this._dateStates[item.time] = multi4.firstName;
+          item.state = multi4.states.firstName;
         } else {
-            if( !this._dateStates[item.time] ) {
-                this._dateStates[item.time] = multi4.lastName;
-            }
-
-            if( this._dateStates[item.time] == multi4.lastName ) {
+            if( item.state == multi4.states.lastName ) {
+              item.state = null;
               this._date.splice(index, 1);
-              if( typeof this._dateStates[item.time] != 'undefined' ) {
-                  delete this._dateStates[item.time];
-              }
             } else {
-              let currentStateName = this._dateStates[item.time];
-              let nextStateIndex = multi4.index[currentStateName] < multi4.lastIndex ? multi4.index[currentStateName]+1 : multi4.lastIndex
-              let nextStateName = multi4.cycle[nextStateIndex];
-              this._dateStates[item.time] = nextStateName;
+              let currentStateName = item.state;
+              let nextStateIndex = multi4.states.index[currentStateName] < multi4.states.lastIndex ? multi4.states.index[currentStateName]+1 : multi4.states.lastIndex
+              let nextStateName = multi4.states.cycle[nextStateIndex];
+              item.state = nextStateName;
             }
         }
 
-        let dates =  this._date.filter(e => e !== null)
-        let res = new Array();
-        for( let i = 0;i < dates.length;i++ ) {
-            let date = dates[i];
-            if( this._dateStates[date.time] ) {
-                res.push({
-                    date:  date,
-                    state: this._dateStates[date.time]
-                });
-            }
-        }
-        this.onChange4.emit( res );
+        this.onChange4.emit(this._date.filter(e => e !== null));
     }
   }
 

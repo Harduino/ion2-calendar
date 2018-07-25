@@ -13,19 +13,30 @@ exports.pickModes = {
     MULTI4: 'multi4'
 };
 var multi4 = {
-    cycle: ['lunch', 'dinner', 'all'],
-    // will be automatically computed
-    index: {},
-    firstName: '',
-    lastName: '',
-    lastIndex: 0
+    states: {
+        cycle: ['lunch', 'dinner', 'all'],
+        index: {},
+        firstName: '',
+        lastName: '',
+        lastIndex: 0,
+    },
+    confirms: {
+        cycle: ['unconfirmed', 'confirmed'],
+        index: {},
+        firstName: '',
+        lastName: '',
+        lastIndex: 0,
+    }
 };
 exports.multi4 = multi4;
-for (var i = 0; i < multi4.cycle.length; i++) {
-    var name_1 = multi4.cycle[i];
-    multi4.index[name_1] = i;
+for (var multi4Name in multi4) {
+    var multi4Obj = multi4[multi4Name];
+    for (var i = 0; i < multi4Obj.cycle.length; i++) {
+        var name_1 = multi4Obj.cycle[i];
+        multi4Obj.index[name_1] = i;
+    }
+    multi4Obj.firstName = multi4Obj.cycle[0];
+    multi4Obj.lastIndex = multi4Obj.cycle.length - 1;
+    multi4Obj.lastName = multi4Obj.cycle[multi4Obj.lastIndex];
 }
-multi4.firstName = multi4.cycle[0];
-multi4.lastIndex = multi4.cycle.length - 1;
-multi4.lastName = multi4.cycle[multi4.lastIndex];
 //# sourceMappingURL=config.js.map

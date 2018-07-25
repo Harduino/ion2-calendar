@@ -16,7 +16,7 @@ import { CalendarService } from "../services/calendar.service";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import * as moment from 'moment';
-import { defaults, pickModes } from "../config";
+import { defaults, pickModes, multi4 } from "../config";
 
 export const ION_CAL_VALUE_ACCESSOR: Provider = {
   provide: NG_VALUE_ACCESSOR,
@@ -261,10 +261,12 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
           case pickModes.MULTI4:
               let dates4 = new Array();
               for (let i = 0; i < $event.length; i++) {
-                  if ($event[i] && $event[i].date.time) {
+                  if ($event[i] && $event[i].time) {
+                      let dateItem = $event[i];
                       dates4.push({
-                        date: this._handleType($event[i].date.time),
-                        state: $event[i].state
+                        date: this._handleType(dateItem.time),
+                        state: dateItem.state || multi4.states.lastName,
+                        confirm: dateItem.confirm || multi4.confirms.lastName
                       });
                   }
               }
@@ -398,8 +400,10 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
           if( value !== null && typeof value === 'object' ) {
               let cmv = new Array();
               for( let dateUnformatted in value ) {
+                  let day = value[dateUnformatted];
                   let dateItem = this._createCalendarDay(dateUnformatted);
-                  dateItem['state'] = value[dateUnformatted];
+                  dateItem['state'] = day['state'] || multi4.states.firstName;
+                  dateItem['confirm'] = day['confirm'] || multi4.confirms.firstName;
                   cmv.push(dateItem);
               }
               this._calendarMonthValue = cmv;
