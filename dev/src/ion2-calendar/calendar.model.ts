@@ -24,6 +24,8 @@ export interface CalendarDay {
   };
   isFirst?: boolean;
   isLast?: boolean;
+  state?: string;
+  confirm?: string;
 }
 
 export class CalendarMonth {
