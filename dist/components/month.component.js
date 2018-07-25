@@ -164,10 +164,10 @@ var MonthComponent = /** @class */ (function () {
         if (this.pickMode === config_1.pickModes.MULTI4) {
             var index = this._date.findIndex(function (e) { return e !== null && e.time === item.time; });
             if (!item.state) {
-                item.state = config_1.multi4.states.lastName;
+                item.state = config_1.multi4.states.firstName;
             }
             if (!item.confirm) {
-                item.confirm = config_1.multi4.confirms.lastName;
+                item.confirm = config_1.multi4.confirms.firstName;
             }
             if (index === -1) {
                 this._date.push(item);

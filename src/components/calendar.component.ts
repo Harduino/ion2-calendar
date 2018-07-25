@@ -265,8 +265,8 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
                       let dateItem = $event[i];
                       dates4.push({
                         date: this._handleType(dateItem.time),
-                        state: dateItem.state || multi4.states.lastName,
-                        confirm: dateItem.confirm || multi4.confirms.lastName
+                        state: dateItem.state || multi4.states.firstName,
+                        confirm: dateItem.confirm || multi4.confirms.firstName
                       });
                   }
               }

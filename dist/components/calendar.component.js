@@ -177,8 +177,8 @@ var CalendarComponent = /** @class */ (function () {
                         var dateItem = $event[i];
                         dates4.push({
                             date: this._handleType(dateItem.time),
-                            state: dateItem.state || config_1.multi4.states.lastName,
-                            confirm: dateItem.confirm || config_1.multi4.confirms.lastName
+                            state: dateItem.state || config_1.multi4.states.firstName,
+                            confirm: dateItem.confirm || config_1.multi4.confirms.firstName
                         });
                     }
                 }
