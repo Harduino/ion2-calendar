@@ -19,24 +19,27 @@ import { CalendarComponentOptions } from '../ion2-calendar'
 export class DemoMultiFourStatesComponent {
 
 	// date: string[] = ['2018-01-01', '2018-01-02', '2018-01-05'];
-	date = {
-		'2018-01-01':'dinner',
-		'2018-01-02':'lunch',
-		'2018-01-05':'all'
-	};
+	date = {};
+
 	options: CalendarComponentOptions = {
 		from: new Date(2000, 0, 1),
 		pickMode: 'multi4'
 	};
-	constructor(public modalCtrl: ModalController) {
 
+	constructor(public modalCtrl: ModalController) {
+		this.date = {
+			'2018-01-01':'dinner',
+			'2018-01-02':'lunch',
+			'2018-01-05':'all'
+		}
 	}
 
 	onChange($event) {
-		this.date = {};
+		let date = {};
 		for( let i = 0;i < $event.length;i++ ) {
 			let dateItem = $event[i];
-			this.date[ dateItem['date'] ] = dateItem['state'];
+			date[ dateItem['date'] ] = dateItem['state'];
 		}
+		this.date = date;
 	}
 }
