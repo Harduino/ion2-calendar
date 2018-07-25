@@ -28,9 +28,18 @@ export class DemoMultiFourStatesComponent {
 
 	constructor(public modalCtrl: ModalController) {
 		this.date = {
-			'2018-01-01':'dinner',
-			'2018-01-02':'lunch',
-			'2018-01-05':'all'
+			'2018-01-01': {
+				state: 'dinner',
+				confirm: 'confirmed'
+			},
+			'2018-01-02': {
+				state: 'lunch',
+				confirm: 'unconfirmed'
+			},
+			'2018-01-05': {
+				state: 'all',
+				confirm: 'confirmed'
+			}
 		}
 	}
 

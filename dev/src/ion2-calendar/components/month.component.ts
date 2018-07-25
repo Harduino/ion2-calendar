@@ -264,21 +264,21 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
 
         if (index === -1) {
           this._date.push(item);
-          this._dateStates[item.time] = multi4.firstName;
+          this._dateStates[item.time] = multi4.states.firstName;
         } else {
             if( !this._dateStates[item.time] ) {
-                this._dateStates[item.time] = multi4.lastName;
+                this._dateStates[item.time] = multi4.states.lastName;
             }
 
-            if( this._dateStates[item.time] == multi4.lastName ) {
+            if( this._dateStates[item.time] == multi4.states.lastName ) {
               this._date.splice(index, 1);
               if( typeof this._dateStates[item.time] != 'undefined' ) {
                   delete this._dateStates[item.time];
               }
             } else {
               let currentStateName = this._dateStates[item.time];
-              let nextStateIndex = multi4.index[currentStateName] < multi4.lastIndex ? multi4.index[currentStateName]+1 : multi4.lastIndex
-              let nextStateName = multi4.cycle[nextStateIndex];
+              let nextStateIndex = multi4.states.index[currentStateName] < multi4.states.lastIndex ? multi4.states.index[currentStateName]+1 : multi4.states.lastIndex
+              let nextStateName = multi4.states.cycle[nextStateIndex];
               this._dateStates[item.time] = nextStateName;
             }
         }

@@ -264,7 +264,8 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
                   if ($event[i] && $event[i].date.time) {
                       dates4.push({
                         date: this._handleType($event[i].date.time),
-                        state: $event[i].state
+                        state: $event[i].state,
+                        confirmed: $event[i].confirmed
                       });
                   }
               }
@@ -399,7 +400,8 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
               let cmv = new Array();
               for( let dateUnformatted in value ) {
                   let dateItem = this._createCalendarDay(dateUnformatted);
-                  dateItem['state'] = value[dateUnformatted];
+                  dateItem['state'] = value[dateUnformatted]['state'];
+                  dateItem['confirmed'] = value[dateUnformatted]['confirmed'];
                   cmv.push(dateItem);
               }
               this._calendarMonthValue = cmv;

@@ -13,20 +13,29 @@ export const pickModes = {
 };
 
 var multi4 = {
-    cycle: [ 'lunch', 'dinner', 'all' ],
-
-    // will be automatically computed
-    index: {},
-    firstName: '',
-    lastName: '',
-    lastIndex: 0
+    states: {
+        cycle: [ 'lunch', 'dinner', 'all' ],
+        index: {},
+        firstName: '',
+        lastName: '',
+        lastIndex: 0,
+    },
+    confirms: {
+        cycle: [ 'unconfirmed', 'confirmed' ],
+        index: {},
+        firstName: '',
+        lastName: '',
+        lastIndex: 0,
+    }
 };
-for( let i = 0;i < multi4.cycle.length;i++ ) {
-    let name = multi4.cycle[i];
-    multi4.index[name] = i;
+for( let multi4Name in multi4 ) {
+    let multi4Obj = multi4[multi4Name];
+    for( let i = 0;i < multi4Obj.cycle.length;i++ ) {
+        let name = multi4Obj.cycle[i];
+        multi4Obj.index[name] = i;
+    }
+    multi4Obj.firstName = multi4Obj.cycle[0];
+    multi4Obj.lastIndex = multi4Obj.cycle.length-1;
+    multi4Obj.lastName = multi4Obj.cycle[multi4Obj.lastIndex];
 }
-multi4.firstName = multi4.cycle[0];
-multi4.lastIndex = multi4.cycle.length-1;
-multi4.lastName = multi4.cycle[multi4.lastIndex];
-
 export { multi4 };
