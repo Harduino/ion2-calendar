@@ -258,10 +258,10 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
         const index = this._date.findIndex(e => e !== null && e.time === item.time);
 
         if( !item.state ) {
-            item.state = multi4.states.lastName;
+            item.state = multi4.states.firstName;
         }
         if( !item.confirm ) {
-            item.confirm = multi4.confirms.lastName;
+            item.confirm = multi4.confirms.firstName;
         }
 
         if (index === -1) {
