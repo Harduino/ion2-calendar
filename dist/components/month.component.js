@@ -163,26 +163,24 @@ var MonthComponent = /** @class */ (function () {
         }
         if (this.pickMode === config_1.pickModes.MULTI4) {
             var index = this._date.findIndex(function (e) { return e !== null && e.time === item.time; });
-            if (!item.state) {
-                item.state = config_1.multi4.states.firstName;
-            }
-            if (!item.confirm) {
-                item.confirm = config_1.multi4.confirms.firstName;
-            }
             if (index === -1) {
-                this._date.push(item);
                 item.state = config_1.multi4.states.firstName;
+                item.confirm = config_1.multi4.confirms.firstName;
+                this._date.push(item);
             }
             else {
-                if (item.state == config_1.multi4.states.lastName) {
-                    item.state = null;
+                var itemLast = this._date[index];
+                if (itemLast.state == config_1.multi4.states.lastName) {
+                    itemLast.state = null;
                     this._date.splice(index, 1);
                 }
                 else {
-                    var currentStateName = item.state;
+                    var currentStateName = itemLast.state;
                     var nextStateIndex = config_1.multi4.states.index[currentStateName] < config_1.multi4.states.lastIndex ? config_1.multi4.states.index[currentStateName] + 1 : config_1.multi4.states.lastIndex;
                     var nextStateName = config_1.multi4.states.cycle[nextStateIndex];
-                    item.state = nextStateName;
+                    itemLast.state = nextStateName;
+                    // update selected date value
+                    this._date[index] = itemLast;
                 }
             }
             this.onChange4.emit(this._date.filter(function (e) { return e !== null; }));

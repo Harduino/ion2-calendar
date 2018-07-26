@@ -257,25 +257,24 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
     if( this.pickMode === pickModes.MULTI4 ) {
         const index = this._date.findIndex(e => e !== null && e.time === item.time);
 
-        if( !item.state ) {
-            item.state = multi4.states.firstName;
-        }
-        if( !item.confirm ) {
-            item.confirm = multi4.confirms.firstName;
-        }
-
         if (index === -1) {
-          this._date.push(item);
           item.state = multi4.states.firstName;
+          item.confirm = multi4.confirms.firstName;
+          this._date.push(item);
         } else {
-            if( item.state == multi4.states.lastName ) {
-              item.state = null;
+            let itemLast = this._date[index];
+
+            if( itemLast.state == multi4.states.lastName ) {
+              itemLast.state = null;
               this._date.splice(index, 1);
             } else {
-              let currentStateName = item.state;
+              let currentStateName = itemLast.state;
               let nextStateIndex = multi4.states.index[currentStateName] < multi4.states.lastIndex ? multi4.states.index[currentStateName]+1 : multi4.states.lastIndex
               let nextStateName = multi4.states.cycle[nextStateIndex];
-              item.state = nextStateName;
+              itemLast.state = nextStateName;
+
+              // update selected date value
+              this._date[index] = itemLast;
             }
         }
 
