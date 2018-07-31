@@ -31,7 +31,7 @@ export declare class CalendarMonth {
     days: Array<CalendarDay | void>;
 }
 export interface DayConfig {
-    date: Date | string;
+    date: any;
     marked?: boolean;
     disable?: boolean;
     title?: string;
