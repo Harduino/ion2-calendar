@@ -34,7 +34,7 @@ export class CalendarMonth {
 }
 
 export interface DayConfig {
-  date: Date;
+  date: Date|string;
   marked?: boolean;
   disable?: boolean;
   title?: string;
